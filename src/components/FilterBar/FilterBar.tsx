@@ -9,6 +9,7 @@ type Props = {
     from: string;
     to: string;
   }) => void;
+  availableBrands: string[];
 };
 
 const FilterBar = ({ onSubmit }: Props) => {

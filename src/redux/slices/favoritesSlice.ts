@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { type Car } from "../../redux/slices/carsSlice";
+import type { Car } from "../../types/car";
 
 const savedFavorites = localStorage.getItem("favorites");
 const initialState: Car[] = savedFavorites ? JSON.parse(savedFavorites) : [];

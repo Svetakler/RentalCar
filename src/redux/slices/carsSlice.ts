@@ -52,7 +52,6 @@ const carsSlice = createSlice({
         state.items = [...state.items, ...action.payload];
         state.isLoading = false;
 
-        // Якщо отримали менше 12 машин, значить це остання сторінка
         if (action.payload.length < 12) {
           state.hasMore = false;
         }
