@@ -1,0 +1,119 @@
+import { useEffect, useState } from "react";
+import styles from "./FilterBar.module.css";
+import { getUniqueBrands } from "../../services/api";
+
+type Props = {
+  onSubmit: (filters: {
+    brand: string;
+    price: string;
+    from: string;
+    to: string;
+  }) => void;
+};
+
+const FilterBar = ({ onSubmit }: Props) => {
+  const [brand, setBrand] = useState("");
+  const [price, setPrice] = useState("");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+
+  const [brands, setBrands] = useState<string[]>([]);
+  const [isLoadingBrands, setIsLoadingBrands] = useState(false);
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      setIsLoadingBrands(true);
+      try {
+        const data = await getUniqueBrands();
+        console.log("Fetched brands:", data);
+        setBrands(data);
+      } catch (error) {
+        console.error("Failed to load brands", error);
+      } finally {
+        setIsLoadingBrands(false);
+      }
+    };
+
+    fetchBrands();
+  }, []);
+
+  const handleSearch = () => {
+    onSubmit({ brand, price, from, to });
+  };
+
+  const prices = Array.from({ length: 11 }, (_, i) => (i + 1) * 10);
+
+  return (
+    <div className={styles.filterBar}>
+      <div className={styles.filterItem}>
+        <label htmlFor="brand">Car brand</label>
+        <select
+          id="brand"
+          className={styles.selectField}
+          value={brand}
+          onChange={(e) => setBrand(e.target.value)}
+        >
+          <option value="">Choose a brand</option>
+          {isLoadingBrands ? (
+            <option disabled>Loading brands...</option>
+          ) : (
+            brands.map((brand) => (
+              <option key={brand} value={brand}>
+                {brand}
+              </option>
+            ))
+          )}
+        </select>
+      </div>
+
+      <div className={styles.filterItem}>
+        <label htmlFor="price">Price/1 hour</label>
+        <select
+          id="price"
+          className={styles.selectField}
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+        >
+          <option value="">Choose a price</option>
+          {prices.map((price) => (
+            <option key={price} value={price}>
+              ${price}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className={styles.filterItem}>
+        <label htmlFor="from">Car mileage / km</label>
+        <input
+          id="from"
+          type="number"
+          placeholder="From"
+          className={styles.inputField}
+          value={from}
+          onChange={(e) => setFrom(e.target.value)}
+        />
+      </div>
+
+      <div className={styles.filterItem}>
+        <label htmlFor="to">To</label>
+        <input
+          id="to"
+          type="number"
+          placeholder="To"
+          className={styles.inputField}
+          value={to}
+          onChange={(e) => setTo(e.target.value)}
+        />
+      </div>
+
+      <div className={styles.filterItem}>
+        <button onClick={handleSearch} className={styles.searchButton}>
+          Search
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default FilterBar;
