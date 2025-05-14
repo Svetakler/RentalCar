@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./FilterBar.module.css";
-import { getUniqueBrands } from "../../services/api";
 
 type Props = {
   onSubmit: (filters: {
@@ -12,31 +11,11 @@ type Props = {
   availableBrands: string[];
 };
 
-const FilterBar = ({ onSubmit }: Props) => {
+const FilterBar = ({ onSubmit, availableBrands }: Props) => {
   const [brand, setBrand] = useState("");
   const [price, setPrice] = useState("");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-
-  const [brands, setBrands] = useState<string[]>([]);
-  const [isLoadingBrands, setIsLoadingBrands] = useState(false);
-
-  useEffect(() => {
-    const fetchBrands = async () => {
-      setIsLoadingBrands(true);
-      try {
-        const data = await getUniqueBrands();
-        console.log("Fetched brands:", data);
-        setBrands(data);
-      } catch (error) {
-        console.error("Failed to load brands", error);
-      } finally {
-        setIsLoadingBrands(false);
-      }
-    };
-
-    fetchBrands();
-  }, []);
 
   const handleSearch = () => {
     onSubmit({ brand, price, from, to });
@@ -55,15 +34,11 @@ const FilterBar = ({ onSubmit }: Props) => {
           onChange={(e) => setBrand(e.target.value)}
         >
           <option value="">Choose a brand</option>
-          {isLoadingBrands ? (
-            <option disabled>Loading brands...</option>
-          ) : (
-            brands.map((brand) => (
-              <option key={brand} value={brand}>
-                {brand}
-              </option>
-            ))
-          )}
+          {availableBrands.map((brand) => (
+            <option key={brand} value={brand}>
+              {brand}
+            </option>
+          ))}
         </select>
       </div>
 
