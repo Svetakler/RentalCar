@@ -88,16 +88,15 @@
 }
 
 .features ul {
-  list-style: disc;
-  padding-left: 20px;
-  color: #444;
+  list-style: none;
 }
 
 .formTitle {
-  font-size: 22px;
-  margin-bottom: 12px;
-  color: #333;
-  text-align: center;
+  font-family: var(--font-family);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 120%;
+  color: var(--main);
 }
 
 .paragraph {
@@ -105,8 +104,7 @@
   font-weight: 500;
   font-size: 16px;
   line-height: 125%;
-  color: var(--gray);
-  margin-top: 8px;
+  color: grey;
 }
 
 .bookingForm {
@@ -144,4 +142,20 @@
 
 .sendButton:hover {
   background-color: #254edb;
+}
+
+.icon {
+  font-size: 18px;
+  color: #3470ff;
+  margin-right: 6px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.carId {
+  display: inline-block;
+  margin-left: 16px;
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
 }

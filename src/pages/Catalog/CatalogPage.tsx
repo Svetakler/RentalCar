@@ -5,6 +5,9 @@ import type { RootState, AppDispatch } from "../../redux/store";
 import CarCard from "../../components/CarCard/CarCard";
 import FilterBar from "../../components/FilterBar/FilterBar";
 import styles from "./CatalogPage.module.css";
+import { getUniqueBrands } from "../../services/api";
+
+import type { Filters } from "../../types/filters";
 
 const CatalogPage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -13,45 +16,43 @@ const CatalogPage = () => {
   );
 
   const [page, setPage] = useState<number>(1);
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     brand: "",
     price: "",
     from: "",
     to: "",
   });
-  const [filteredItems, setFilteredItems] = useState<typeof items>([]);
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
+  const [availableBrands, setAvailableBrands] = useState<string[]>([]);
+
+  useEffect(() => {
+    const loadBrands = async () => {
+      try {
+        const brandsData = await getUniqueBrands();
+        setAvailableBrands(brandsData);
+      } catch (error) {
+        console.error("Failed to load brands:", error);
+      }
+    };
+
+    loadBrands();
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = "auto";
     dispatch(resetCars());
-    dispatch(fetchCars(1));
+    dispatch(fetchCars({ page: 1 }));
   }, [dispatch]);
 
   useEffect(() => {
     if (page > 1) {
-      dispatch(fetchCars(page));
+      if (isFiltering) {
+        dispatch(fetchCars({ page, filters }));
+      } else {
+        dispatch(fetchCars({ page }));
+      }
     }
-  }, [dispatch, page]);
-
-  useEffect(() => {
-    if (isFiltering) {
-      const filtered = items.filter((car) => {
-        const rentalPrice = Number(car.rentalPrice.replace("$", ""));
-        const mileage = car.mileage;
-
-        const matchesBrand = !filters.brand || car.brand === filters.brand;
-        const matchesPrice = !filters.price || rentalPrice <= +filters.price;
-        const matchesMileage =
-          (!filters.from || mileage >= +filters.from) &&
-          (!filters.to || mileage <= +filters.to);
-
-        return matchesBrand && matchesPrice && matchesMileage;
-      });
-
-      setFilteredItems(filtered);
-    }
-  }, [items, filters, isFiltering]);
+  }, [dispatch, page, filters, isFiltering]);
 
   const handleFilterSubmit = (newFilters: {
     brand: string;
@@ -61,6 +62,11 @@ const CatalogPage = () => {
   }) => {
     setFilters(newFilters);
     setIsFiltering(true);
+
+    dispatch(resetCars());
+    setPage(1);
+
+    dispatch(fetchCars({ page: 1, filters: newFilters }));
   };
 
   const loadMore = () => {
@@ -69,11 +75,9 @@ const CatalogPage = () => {
     }
   };
 
-  const carsToShow = isFiltering ? filteredItems : items;
+  const carsToShow = items;
 
-  const canLoadMore = isFiltering ? false : hasMore && !isLoading;
-
-  const availableBrands = [...new Set(items.map((car) => car.brand))];
+  const canLoadMore = hasMore && !isLoading;
 
   return (
     <div className={styles.catalog}>

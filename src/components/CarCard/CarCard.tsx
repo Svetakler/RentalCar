@@ -6,6 +6,7 @@ import { type Car } from "../../types/car";
 import styles from "./CarCard.module.css";
 import placeholder from "../../img/Picture.jpg";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { formatMileage } from "../../utils/formatMileage";
 
 interface Props {
   car: Car;
@@ -13,14 +14,16 @@ interface Props {
 
 const CarCard = ({ car }: Props) => {
   const dispatch = useDispatch();
-  const favorites = useSelector((state: RootState) => state.favorites);
-  const isFavorite = favorites.some((fav) => fav.id === car.id);
+  const favorites = useSelector((state: RootState) => state.favorites.items);
+  const isFavorite = favorites.some((fav: Car) => fav.id === car.id);
 
   const navigate = useNavigate();
 
   const city = car.address.split(",")[1]?.trim() || "";
   const country = car.address.split(",")[2]?.trim() || "";
   const price = car.rentalPrice.replace("$", "");
+
+  const formattedMileage = formatMileage(car.mileage);
 
   return (
     <div className={styles.carCard}>
@@ -54,7 +57,7 @@ const CarCard = ({ car }: Props) => {
           {city} | {country} | {car.type}
         </p>
         <p>
-          {car.brand} | {car.mileage.toLocaleString()} km | {car.accessories[0]}
+          {car.brand} | {formattedMileage} | {car.accessories[0]}
         </p>
       </div>
 

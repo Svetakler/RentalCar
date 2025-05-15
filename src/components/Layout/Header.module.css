@@ -1,10 +1,10 @@
 .header {
+  margin-left: 120px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 16px 32px;
   background-color: white;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   position: relative;
   z-index: 10;
 }
@@ -19,9 +19,14 @@
 .logo span {
   color: #3b82f6;
 }
+.nav {
+  display: flex;
+  gap: 32px;
+  margin-right: 120px;
+}
 
 .nav a {
-  margin-left: 24px;
+  font-weight: 500;
   font-size: 16px;
   text-decoration: none;
   color: #1f2937;

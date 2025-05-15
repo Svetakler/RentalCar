@@ -1,44 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { type Filters } from "../../types/filters";
 
-interface FiltersState {
-  brand: string;
-  price: number | null;
-  mileageFrom: number | null;
-  mileageTo: number | null;
-}
-
-const initialState: FiltersState = {
+const initialState: Filters = {
   brand: "",
-  price: null,
-  mileageFrom: null,
-  mileageTo: null,
+  price: "",
+  from: "",
+  to: "",
 };
 
 const filtersSlice = createSlice({
   name: "filters",
   initialState,
   reducers: {
-    setBrand: (state, action: PayloadAction<string>) => {
-      state.brand = action.payload;
+    setFilters: (state, action: PayloadAction<Filters>) => {
+      return { ...state, ...action.payload };
     },
-    setPrice: (state, action: PayloadAction<number | null>) => {
-      state.price = action.payload;
+    resetFilters: () => {
+      return initialState;
     },
-    setMileageFrom: (state, action: PayloadAction<number | null>) => {
-      state.mileageFrom = action.payload;
-    },
-    setMileageTo: (state, action: PayloadAction<number | null>) => {
-      state.mileageTo = action.payload;
-    },
-    resetFilters: () => initialState,
   },
 });
-export const {
-  setBrand,
-  setPrice,
-  setMileageFrom,
-  setMileageTo,
-  resetFilters,
-} = filtersSlice.actions;
+
+export const { setFilters, resetFilters } = filtersSlice.actions;
 export default filtersSlice.reducer;

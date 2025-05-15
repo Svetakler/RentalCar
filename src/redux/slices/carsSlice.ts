@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getAllCars } from "../../services/api";
 import type { Car } from "../../types/car";
+import type { Filters } from "../../types/filters";
 
 interface CarsState {
   items: Car[];
@@ -16,21 +17,21 @@ const initialState: CarsState = {
   hasMore: true,
 };
 
-export const fetchCars = createAsyncThunk<Car[], number>(
-  "cars/fetchCars",
-  async (page = 1, { rejectWithValue }) => {
-    try {
-      const response = await getAllCars(page);
-      const carsData = Array.isArray(response.data)
-        ? response.data
-        : response.data?.cars ?? [];
+export const fetchCars = createAsyncThunk<
+  Car[],
+  { page: number; filters?: Filters }
+>("cars/fetchCars", async ({ page = 1, filters }, { rejectWithValue }) => {
+  try {
+    const response = await getAllCars(page, 12, filters);
+    const carsData = Array.isArray(response.data)
+      ? response.data
+      : response.data?.cars ?? [];
 
-      return carsData;
-    } catch (error) {
-      return rejectWithValue("Failed to fetch cars");
-    }
+    return carsData;
+  } catch (error) {
+    return rejectWithValue("Failed to fetch cars");
   }
-);
+});
 
 const carsSlice = createSlice({
   name: "cars",
