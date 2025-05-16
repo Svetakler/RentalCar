@@ -4,13 +4,14 @@ import type { RootState } from "../../redux/store";
 import styles from "./CarDetailsPage.module.css";
 
 // Іконки
-import { HiOutlineMapPin, HiOutlineCurrencyDollar } from "react-icons/hi2";
-import { HiBuildingOffice2 } from "react-icons/hi2";
+import { HiOutlineMapPin } from "react-icons/hi2";
+import { BsCheckCircle } from "react-icons/bs";
 import { FaCarSide } from "react-icons/fa";
 import { PiGasPumpBold, PiGaugeBold } from "react-icons/pi";
 import { TbRoad } from "react-icons/tb";
 import { LuCalendarClock } from "react-icons/lu";
-import { PiSteeringWheelBold } from "react-icons/pi";
+// import { PiSteeringWheelBold } from "react-icons/pi";
+import { FaDollarSign } from "react-icons/fa";
 
 const CarDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -86,78 +87,74 @@ const CarDetailsPage = () => {
         <div className={styles.right}>
           <h2 className={styles.title}>
             {car.brand} <span>{car.model}</span>, {car.year}
-            <span className={styles.carId}>ID: {car.id}</span>
+            <span className={styles.carId}>Id: {car.id}</span>
           </h2>
 
-          <li>
-            <HiOutlineMapPin className={styles.icon} />
-            {city}
-          </li>
-          <li>
-            <HiOutlineMapPin className={styles.icon} />
-            {country}
-          </li>
-          <li>
-            <HiBuildingOffice2 className={styles.icon} />
-            {car.rentalCompany}
-          </li>
-          <li>
-            <FaCarSide className={styles.icon} />
-            Type: {car.type}
-          </li>
-          <li>
-            <PiGasPumpBold className={styles.icon} />
-            Fuel Consumption: {car.fuelConsumption}
-          </li>
-          <li>
-            <PiGaugeBold className={styles.icon} />
-            Engine Size: {car.engineSize}
-          </li>
-          <li>
-            <TbRoad className={styles.icon} />
-            Mileage: {car.mileage.toLocaleString()} km
-          </li>
-          <li>
-            <HiOutlineCurrencyDollar className={styles.icon} />
-            Price: {car.rentalPrice}
-          </li>
+          <ul className={styles.infoList}>
+            <li>
+              <HiOutlineMapPin className={styles.icon} />
+              {city}, {country}
+            </li>
+            <li>
+              <TbRoad className={styles.icon} />
+              Mileage: {car.mileage.toLocaleString()} km
+            </li>
+            <li>
+              <div className={styles.priceWrapper}>
+                <FaDollarSign className={styles.dollarIcon} />
+                {car.rentalPrice}
+              </div>
+            </li>
+          </ul>
 
           <p className={styles.description}>{car.description}</p>
 
-          <div className={styles.features}>
-            <div>
-              <h4>Accessories</h4>
-              <ul>
-                {car.accessories.map((item, i) => (
-                  <li key={i}>
-                    <PiSteeringWheelBold className={styles.icon} />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4>Functionalities</h4>
-              <ul>
-                {car.functionalities.map((item, i) => (
-                  <li key={i}>
-                    <PiSteeringWheelBold className={styles.icon} />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4>Rental Conditions</h4>
-              <ul>
-                {car.rentalConditions.map((cond, i) => (
-                  <li key={i}>
-                    <LuCalendarClock className={styles.icon} />
-                    {cond}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className={styles.section}>
+            <h4 className={styles.sectionTitle}>Rental Conditions:</h4>
+            <ul className={styles.conditionList}>
+              {car.rentalConditions.map((cond, i) => (
+                <li key={i}>
+                  <BsCheckCircle className={styles.icon} />
+                  {cond}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className={styles.section}>
+            <h4 className={styles.sectionTitle}>Car Specifications:</h4>
+            <ul className={styles.specsList}>
+              <li>
+                <LuCalendarClock className={styles.icon} />
+                Year: {car.year}
+              </li>
+              <li>
+                <FaCarSide className={styles.icon} />
+                Type: {car.type}
+              </li>
+              <li>
+                <PiGasPumpBold className={styles.icon} />
+                Fuel Consumption: {car.fuelConsumption}
+              </li>
+              <li>
+                <PiGaugeBold className={styles.icon} />
+                Engine Size: {car.engineSize}
+              </li>
+            </ul>
+          </div>
+
+          <div className={styles.section}>
+            <h4 className={styles.sectionTitle}>
+              Accessories and functionalities:
+            </h4>
+            <ul className={styles.accessoriesList}>
+              {[...car.accessories, ...car.functionalities].map((item, i) => (
+                <li key={i}>
+                  <BsCheckCircle className={styles.icon} />
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>

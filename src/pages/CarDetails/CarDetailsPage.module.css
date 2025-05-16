@@ -130,12 +130,18 @@
 }
 
 .sendButton {
+  border-radius: 12px;
+  padding: 12px 51px;
+  width: 156px;
+  margin: 0 auto;
+  display: block;
+
   height: 44px;
   background-color: #3470ff;
   color: white;
   border: none;
   font-size: 16px;
-  border-radius: 8px;
+
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
@@ -158,4 +164,67 @@
   font-size: 14px;
   color: #6b7280;
   font-weight: 500;
+}
+
+.section {
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #111;
+}
+
+.infoList,
+.conditionList,
+.specsList,
+.accessoriesList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.infoList {
+  margin-bottom: 16px;
+  font-size: 15px;
+  color: #222;
+}
+
+.icon {
+  font-size: 18px;
+  color: black;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.rentalPrice {
+  margin-top: 16px;
+
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 133%;
+}
+
+.priceWrapper {
+  display: flex;
+  align-items: center;
+  color: #3470ff;
+
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 133%;
+}
+
+.dollarIcon {
+  font-size: 24px;
+
+  position: relative;
+  top: 1px;
+  color: #3470ff;
 }

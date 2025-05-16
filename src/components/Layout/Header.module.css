@@ -41,3 +41,24 @@
   font-weight: 600;
   color: #3b82f6;
 }
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 0;
+    padding: 16px;
+  }
+
+  .nav {
+    flex-direction: column;
+    gap: 16px;
+    margin-right: 0;
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .nav a {
+    font-size: 18px;
+  }
+}
