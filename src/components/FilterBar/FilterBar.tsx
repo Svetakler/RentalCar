@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./FilterBar.module.css";
+import FormattedNumberInput from "../FormattedNumberInput/FormattedNumberInput";
 
 type Props = {
   onSubmit: (filters: {
@@ -61,25 +62,23 @@ const FilterBar = ({ onSubmit, availableBrands }: Props) => {
 
       <div className={styles.filterItem}>
         <label htmlFor="from">Car mileage / km</label>
-        <input
+        <FormattedNumberInput
           id="from"
-          type="number"
           placeholder="From"
           className={styles.inputField}
           value={from}
-          onChange={(e) => setFrom(e.target.value)}
+          onChange={setFrom}
         />
       </div>
 
       <div className={styles.filterItem}>
         <label htmlFor="to">To</label>
-        <input
+        <FormattedNumberInput
           id="to"
-          type="number"
           placeholder="To"
           className={styles.inputField}
           value={to}
-          onChange={(e) => setTo(e.target.value)}
+          onChange={setTo}
         />
       </div>
 

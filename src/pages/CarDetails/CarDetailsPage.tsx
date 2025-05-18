@@ -3,15 +3,15 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../../redux/store";
 import styles from "./CarDetailsPage.module.css";
 
-// Іконки
 import { HiOutlineMapPin } from "react-icons/hi2";
 import { BsCheckCircle } from "react-icons/bs";
-import { FaCarSide } from "react-icons/fa";
+import { FaCarSide, FaDollarSign } from "react-icons/fa";
 import { PiGasPumpBold, PiGaugeBold } from "react-icons/pi";
 import { TbRoad } from "react-icons/tb";
 import { LuCalendarClock } from "react-icons/lu";
-// import { PiSteeringWheelBold } from "react-icons/pi";
-import { FaDollarSign } from "react-icons/fa";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CarDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,12 +19,20 @@ const CarDetailsPage = () => {
     state.cars.items.find((c) => c.id === id)
   );
 
-  if (!car) return <p className={styles.notFound}>Car not found</p>;
+  if (!car) {
+    return <p className={styles.notFound}>Car not found</p>;
+  }
 
-  const [city, country] = car.address
-    .split(",")
-    .slice(1)
-    .map((s) => s.trim());
+  const addressParts = car.address.split(",").map((part) => part.trim());
+  const city =
+    addressParts.length > 1 ? addressParts[addressParts.length - 2] : "";
+  const country =
+    addressParts.length > 0 ? addressParts[addressParts.length - 1] : "";
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    toast.success("Request sent!");
+  };
 
   return (
     <div className={styles.pageContainer}>
@@ -41,13 +49,7 @@ const CarDetailsPage = () => {
             <h2 className={styles.paragraph}>
               Stay connected! We are always ready to help you.
             </h2>
-            <form
-              className={styles.bookingForm}
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert("Request sent!");
-              }}
-            >
+            <form className={styles.bookingForm} onSubmit={handleSubmit}>
               <label>
                 <input type="text" name="name" required placeholder="Name*" />
               </label>
@@ -59,16 +61,14 @@ const CarDetailsPage = () => {
                   placeholder="Email*"
                 />
               </label>
-
               <label>
                 <input
                   type="text"
-                  name="Booking date"
+                  name="bookingDate"
                   required
                   placeholder="Booking date"
                 />
               </label>
-
               <label>
                 <textarea
                   name="comment"
@@ -109,7 +109,7 @@ const CarDetailsPage = () => {
 
           <p className={styles.description}>{car.description}</p>
 
-          <div className={styles.section}>
+          <section className={styles.section}>
             <h4 className={styles.sectionTitle}>Rental Conditions:</h4>
             <ul className={styles.conditionList}>
               {car.rentalConditions.map((cond, i) => (
@@ -119,9 +119,9 @@ const CarDetailsPage = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </section>
 
-          <div className={styles.section}>
+          <section className={styles.section}>
             <h4 className={styles.sectionTitle}>Car Specifications:</h4>
             <ul className={styles.specsList}>
               <li>
@@ -141,9 +141,9 @@ const CarDetailsPage = () => {
                 Engine Size: {car.engineSize}
               </li>
             </ul>
-          </div>
+          </section>
 
-          <div className={styles.section}>
+          <section className={styles.section}>
             <h4 className={styles.sectionTitle}>
               Accessories and functionalities:
             </h4>
@@ -155,9 +155,11 @@ const CarDetailsPage = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </section>
         </div>
       </div>
+
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };

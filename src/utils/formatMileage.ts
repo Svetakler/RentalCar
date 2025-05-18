@@ -1,3 +1,8 @@
-export const formatMileage = (mileage: number): string => {
-  return mileage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " km";
+export const formatMileage = (mileage: number | string): string => {
+  const num =
+    typeof mileage === "string" ? parseInt(mileage.trim(), 10) : mileage;
+
+  if (isNaN(num)) return "—";
+
+  return num.toLocaleString("en-US") + " km";
 };

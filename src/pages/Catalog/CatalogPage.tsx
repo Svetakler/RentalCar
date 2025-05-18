@@ -77,7 +77,7 @@ const CatalogPage = () => {
 
   const carsToShow = items.filter((car) => {
     if (!filters.price) return true;
-    return car.rentalPrice === filters.price;
+    return car.rentalPrice.replace("$", "") === filters.price;
   });
 
   const canLoadMore = hasMore && !isLoading;
